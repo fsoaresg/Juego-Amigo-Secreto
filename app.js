@@ -40,3 +40,14 @@ function mostrarLista() {
 }
 
 
+function sortearAmigo() {
+    if (amigos.length === 0) {
+        alert("La lista está vacía, agrega al menos un nombre.");
+        return;
+    }
+ 
+    let indiceAleatorio = Math.floor(Math.random() * amigos.length);
+    let amigoSecreto = amigos[indiceAleatorio];
+    document.getElementById("resultado").textContent =
+    `🎁 El amigo secreto sorteado es: ${amigoSecreto}`;
+}
