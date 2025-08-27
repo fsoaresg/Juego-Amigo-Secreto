@@ -42,10 +42,7 @@ function mostrarLista(datos) {
             listaHtml += "<ul>"; // Abre una nueva columna
         }
 
-        // Si ya fue sorteado, le aplica tachado
-        //let clase = sorteados.includes(datos[i]) ? "tachado" : "";
         listaHtml += `<li id="amigo-${i}">${datos[i]}</li>`;
-        //listaHtml += `<li id="amigo-${i}" class="${clase}">${datos[i]}</li>`;
     }
 
     listaHtml += "</ul></div>";
@@ -79,10 +76,21 @@ function sortearAmigo() {
     // Muestra el resultado del sorteo junto con dos imagenes dinámicas asociadas al resultado
     resultadoDiv.innerHTML = `
         <div class="resultado-contenedor">
+            <img src="assets/resultado-1.png" alt="Imagen alusiva a obtener el resultado del amigo secreto">
             <span><strong>Tu amigo secreto es: ${amigoSecreto}</strong></span>
+            <img src="assets/resultado-2.png" alt="Imagen alusiva a celebración por resultado del amigo secreto">
         </div>
     `;
     
     // console.log("Elemento eliminado:", amigoSecreto);
+    // console.log("Array actualizado:", sorteados);
+}
+
+function reiniciarJuego() {
+    sorteados = []; // Limpia el array sorteados
+    amigos = []; // Limpia el array amigos que contiene la lista de amigos
+    document.getElementById("seccion-lista").innerHTML = "";
+    document.getElementById("resultado").innerHTML = "";
+    // console.log("Lista de amigos:", amigos);
     // console.log("Array actualizado:", sorteados);
 }
