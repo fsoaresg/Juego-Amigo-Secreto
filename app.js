@@ -1,8 +1,8 @@
 /* El principal objetivo de este desafío es fortalecer tus habilidades en lógica de programación. Aquí deberás desarrollar 
 la lógica para resolver el problema.*/
 
-let amigos = [];
-let tituloDeLista = document.getElementById("subtitleListaAmigos");
+let amigos = []; // <-- aquí guardamos los nombres de la lista de amigos que ingresa el usuario
+let sorteados = []; // <-- aquí guardamos los nombres ya sorteados
 
 
 function agregarAmigo() {
@@ -18,36 +18,71 @@ function agregarAmigo() {
     }
     
     amigos.push(nombre);
-    mostrarLista();
-    input.value = "";
+    // console.log(amigos);
+    mostrarLista(amigos);
+    limpiarCampo();
 }
 
+function limpiarCampo() {
+    document.querySelector('#amigo').value = '';
+}
 
-function mostrarLista() {
-   tituloDeLista.innerHTML = ('h3','Lista de amigos:');
-    let lista = document.getElementById("listaAmigos");
-    lista.innerHTML = "";
-    
-    amigos.forEach((amigo) => {
-    let li = document.createElement("li");
-    /*textContent es una propiedad que se utiliza para obtener el contenido de texto de un 
-    nodo y sus descendientes en un documento HTML*/
-    li.textContent = amigo;
-    /*appendChild() es un método de JavaScript que se utiliza para añadir un nodo hijo (li) 
-    en el nodo padre (lu) del DOM (Document Object Model).*/
-    lista.appendChild(li);
-    });
+function mostrarLista(datos) {
+    // Crea el contenedor que muestra imagen y título dinámicos (solo una vez) al crear la lista
+    let listaHtml = `
+        <div id="imagenContainer">
+            <h3>Lista de Amigos</h3>
+        </div>
+        <div class="lista-contenedor">
+    `;
+    // Permite mostrar en cada columna máximo 5 nombres
+    for (let i = 0; i < datos.length; i++) {
+        if (i % 5 === 0) {
+            if (i > 0) listaHtml += "</ul>"; // Cierra la columna anterior
+            listaHtml += "<ul>"; // Abre una nueva columna
+        }
+
+        // Si ya fue sorteado, le aplica tachado
+        //let clase = sorteados.includes(datos[i]) ? "tachado" : "";
+        listaHtml += `<li id="amigo-${i}">${datos[i]}</li>`;
+        //listaHtml += `<li id="amigo-${i}" class="${clase}">${datos[i]}</li>`;
+    }
+
+    listaHtml += "</ul></div>";
+    document.getElementById("seccion-lista").innerHTML = listaHtml;
 }
 
 
 function sortearAmigo() {
-    if (amigos.length === 0) {
-        alert("La lista está vacía, agrega al menos un nombre.");
+    let resultadoDiv = document.getElementById("resultado");
+
+    // Filtra los nombres que aún no han sido sorteados
+    let disponibles = amigos.filter(a => !sorteados.includes(a));
+
+    // Revisa si todos los nombres al listado de amigos han sido sorteados, si ya todos fueron sorteados muestra una alerta
+    if (disponibles.length === 0) {
+        alert("¡Todos los nombres ya fueron sorteados!");
         return;
     }
- 
-    let indiceAleatorio = Math.floor(Math.random() * amigos.length);
-    let amigoSecreto = amigos[indiceAleatorio];
-    document.getElementById("resultado").textContent =
-    `🎁 El amigo secreto sorteado es: ${amigoSecreto}`;
+
+    // Elige al azar dentro de los disponibles para seleccionar al amigo secreto sorteado
+    let indice = Math.floor(Math.random() * disponibles.length);
+    let amigoSecreto = disponibles[indice];
+
+    // Agrega al amigo secreto sorteado al array sorteados para facilitar la verificación y 
+    // que no vuelva a ser sorteado evitando así que dos personas tengan el mismo amigo secreto
+    sorteados.push(amigoSecreto);
+
+    // Muestra lista de amigos
+    mostrarLista(amigos);
+
+    // Muestra el resultado del sorteo junto con dos imagenes dinámicas asociadas al resultado
+    resultadoDiv.innerHTML = `
+        <div class="resultado-contenedor">
+            <span><strong>Tu amigo secreto es: ${amigoSecreto}</strong></span>
+        </div>
+    `;
+    
+    // console.log("Elemento eliminado:", amigoSecreto);
+    // console.log("Array actualizado:", sorteados);
 }
